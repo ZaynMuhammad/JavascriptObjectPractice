@@ -22,36 +22,7 @@ interface CourseAvg {
     [key: string]: number
 }
 
-const createCourseMarksPerYearObj = (courseRecords: CourseRecords[], courseNames: string[]): CourseMarks => { 
-    const courseMarksPerYearObj: CourseMarks = {};
-
-    for (let courseName of courseNames) {
-        let courseRecord = courseRecords.find(courseRecord => courseRecord.name === courseName)
-        if (courseRecord === undefined)
-            continue;
-
-        if (courseRecord.status !== CompletionStatus.COMPLETE)
-            continue;
-        
-        let year = courseRecord.yearTaken;
-
-        // Check if year exists in obj, if not add it as a new key
-        if (!(year in courseMarksPerYearObj)) {
-            courseMarksPerYearObj[year] = {
-                totalMarks: 0.0,
-                numberOfCourses: 0
-            };
-        }
-
-        courseMarksPerYearObj[year].totalMarks += courseRecord.mark;
-        courseMarksPerYearObj[year].numberOfCourses += 1;
-    }
-
-    return courseMarksPerYearObj;
-}
-
-const createCourseAvgPerYearObj = (courseRecords: CourseRecords[], courseNames: string[]) => { 
-    const courseMarksPerYearObj = createCourseMarksPerYearObj(courseRecords, courseNames);
+const createCourseAvgPerYearObj = (courseMarksPerYearObj: CourseMarks) => { 
     const courseAvgObj: CourseAvg = {};
 
     for (const year in courseMarksPerYearObj) {
@@ -79,7 +50,31 @@ const averageSomeCoursesPerYear = (courseRecords: CourseRecords[], courseNames: 
     if (courseNames.length === 0) 
         return 0;
 
-    const courseAvgPerYearObj = createCourseAvgPerYearObj(courseRecords, courseNames);
+    const courseMarksPerYearObj: CourseMarks = {};
+
+    for (let courseName of courseNames) {
+        let courseRecord = courseRecords.find(courseRecord => courseRecord.name === courseName)
+        if (courseRecord === undefined)
+            continue;
+
+        if (courseRecord.status !== CompletionStatus.COMPLETE)
+            continue;
+        
+        let year = courseRecord.yearTaken;
+
+        // Check if year exists in obj, if not add it as a new key
+        if (!(year in courseMarksPerYearObj)) {
+            courseMarksPerYearObj[year] = {
+                totalMarks: 0.0,
+                numberOfCourses: 0
+            };
+        }
+
+        courseMarksPerYearObj[year].totalMarks += courseRecord.mark;
+        courseMarksPerYearObj[year].numberOfCourses += 1;
+    }
+
+    const courseAvgPerYearObj = createCourseAvgPerYearObj(courseMarksPerYearObj);
         
     return courseAvgPerYearObj;
 }
