@@ -54,13 +54,14 @@ const averageSomeCoursesPerYear = (courseRecords: CourseRecords[], courseNames: 
 
     for (let courseName of courseNames) {
         let courseRecord = courseRecords.find(courseRecord => courseRecord.name === courseName)
+
         if (courseRecord === undefined)
             continue;
 
         if (courseRecord.status !== CompletionStatus.COMPLETE)
             continue;
         
-        let year = courseRecord.yearTaken;
+        let { yearTaken: year } = courseRecord;
 
         // Check if year exists in obj, if not add it as a new key
         if (!(year in courseMarksPerYearObj)) {
