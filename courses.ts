@@ -61,7 +61,7 @@ const averageSomeCoursesPerYear = (courseRecords: CourseRecords[], courseNames: 
         if (courseRecord.status !== CompletionStatus.COMPLETE)
             continue;
         
-        let { yearTaken: year } = courseRecord;
+        const { yearTaken: year } = courseRecord;
 
         // Check if year exists in obj, if not add it as a new key
         if (!(year in courseMarksPerYearObj)) {
